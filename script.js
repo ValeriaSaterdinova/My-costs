@@ -1,14 +1,14 @@
 let allBuys = [];
-let valueInput = '';
-let input = null;
-let valueInput1 = '';
-let input1 = null;
+let placeName = '';
+let placeNameInput = null;
+let placeValue = '';
+let placeValueInput = null;
 
 window.onload =  init = () => {
-  input = document.getElementById('expenses');
-  input.addEventListener('change', updateValue);
-  input1 = document.getElementById('expenses1');
-  input1.addEventListener('change', updateValue1);
+  placeNameInput = document.getElementById('expenses');
+  placeNameInput.addEventListener('change', updateName);
+  placeValueInput = document.getElementById('expenses1');
+  placeValueInput.addEventListener('change', updateValue);
   render();
 }
 
@@ -18,25 +18,25 @@ const onClickButton = () => {
     date: currentDate,
     price: valueInput1
   }); 
-  valueInput = '';
-  input.value = '';
-  valueInput1 = '';
-  input1.value = '';
+  placeName = '';
+  placeNameInput = '';
+  placeValue = '';
+  placeValueInput = '';
   render();
 }
 
-const updateValue = (event) => {
-  valueInput = event.target.value;
+const updateName = (event) => {
+  placeNameInput = event.target.value;
 }
 
-const updateValue1 = (event) => {
-  valueInput1 = +event.target.value;
+const updateValue = (event) => {
+  placeValueInput = +event.target.value;
 }
 
 let now = new Date();
 let currentDate = (now.getDate() + "." + now.getMonth() + "." + now.getFullYear());
 
-const FullSummary = () => {
+const fullSummary = () => {
   let sum = 0
   for (const buy of allBuys) {
     sum += buy.price
@@ -46,13 +46,12 @@ const FullSummary = () => {
 };
 
 const render = () => {
-  let element = 0;
   const content = document.getElementById('content-page');
   while (content.firstChild) {
     content.removeChild(content.firstChild);
   }
   allBuys.map((item, index) => {
-    FullSummary();
+    fullSummary();
     const { text, price, date } = item;
     const container = document.createElement('div');
     container.id = `buy-${index}`;
