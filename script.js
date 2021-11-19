@@ -4,7 +4,7 @@ let placeNameInput = null;
 let placeValue = '';
 let placeValueInput = null;
 
-window.onload =  init = () => {
+window.onload = init = () => {
   placeNameInput = document.getElementById('expenses');
   placeNameInput.addEventListener('change', updateName);
   placeValueInput = document.getElementById('expenses1');
@@ -14,30 +14,30 @@ window.onload =  init = () => {
 
 const onClickButton = () => {
   allBuys.push({
-    text: valueInput,
+    text: placeName,
     date: currentDate,
-    price: valueInput1
-  }); 
+    price: placeValue
+  });
   placeName = '';
-  placeNameInput = '';
+  placeNameInput.value = '';
   placeValue = '';
-  placeValueInput = '';
+  placeValueInput.value = '';
   render();
 }
 
 const updateName = (event) => {
-  placeNameInput = event.target.value;
+  placeName = event.target.value;
 }
 
 const updateValue = (event) => {
-  placeValueInput = +event.target.value;
+  placeValue = +event.target.value;
 }
 
 let now = new Date();
 let currentDate = (now.getDate() + "." + now.getMonth() + "." + now.getFullYear());
 
 const fullSummary = () => {
-  let sum = 0
+  let sum = 0;
   for (const buy of allBuys) {
     sum += buy.price
   };
@@ -49,15 +49,15 @@ const render = () => {
   const content = document.getElementById('content-page');
   while (content.firstChild) {
     content.removeChild(content.firstChild);
-  }
+  };
   allBuys.map((item, index) => {
     fullSummary();
-    const { text, price, date } = item;
+    let { text, price, date } = item;
     const container = document.createElement('div');
     container.id = `buy-${index}`;
     container.className = 'buy-container';
     const par = document.createElement('p');
-    par.innerText = `${index+1})`;
+    par.innerText = `${index + 1})`;
     container.appendChild(par);
     const place = document.createElement('p');
     place.innerText = text;
@@ -72,10 +72,46 @@ const render = () => {
     const imageEdit = document.createElement('img');
     imageEdit.src = "edit.svg";
     container.appendChild(imageEdit);
+    imageEdit.onclick = () => {
+      const inputBuyName = document.createElement('input');
+      inputBuyName.type = 'text';
+      inputBuyName.value = place.innerText;
+      container.replaceChild(inputBuyName, place);
+
+      const inputBuyValue = document.createElement('input');
+      inputBuyValue.type = 'number';
+      inputBuyValue.value = total.innerText;
+      container.replaceChild(inputBuyValue, total);
+
+      const inputBuyDate = document.createElement('input');
+      inputBuyDate.type = 'date';
+      inputBuyDate.value = when.innerText
+      console.log(inputBuyDate.value)
+      container.replaceChild(inputBuyDate, when);
+      
+      imageEdit.onclick = () => {
+        console.log(inputBuyName.value, inputBuyValue.value)
+        item.text = inputBuyName.value;
+        item.price = +inputBuyValue.value;
+        item.date = (inputBuyDate.value).split("-").reverse().join('.');
+        render();
+      };  
+      imageDelete.onclick = () => {
+        render();
+      };
+    };
+
     const imageDelete = document.createElement('img');
     imageDelete.src = "delete.svg";
+    imageDelete.onclick = () => {
+      deleteBuy(index);
+    };
     container.appendChild(imageDelete);
     content.appendChild(container);
   });
-}
+};
 
+const deleteBuy = (index) => {
+  allBuys = allBuys.filter((item, index1) => (index1 !== index));
+  render();
+};
