@@ -1,0 +1,115 @@
+body {
+  background-image: url(budget.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 95vh;
+  width: 95vw;
+}
+
+.main-elements-control {
+  background-color: #fffffff3;
+  width: 60em;
+  height: 15em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pay {
+  height: 8em;
+  width: 50em;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-end;
+  margin-bottom: 32px;
+}
+
+.main-elements-control h1 {
+  font-size: 2.5em;
+}
+
+.when-how p {
+  font-size: 1.3em;
+}
+
+#expenses{
+  height: 2em;
+  width: 18em;
+  font-size: medium;
+}
+
+#expenses1{
+  height: 2em;
+  width: 18em;
+  font-size: medium;
+}
+
+#expenses:hover {
+  box-shadow: 0 3px 15px #ff947062;
+}
+
+#expenses1:hover {
+  box-shadow: 0 3px 15px #ff947062;
+}
+
+.pay button {
+  font-size: medium;
+  height: 2.4em;
+  width: 8em;
+  color: white;
+  background-color: #f46a3d;;
+  border: none;
+}
+
+.summa {
+  background-color: #ffffffee;
+  margin-top: 0.4em;
+  display: flex;
+  height: auto;
+  width: auto;
+  align-items: center;
+}
+
+.summa p {
+  font-size: 1.5em;
+  margin: 0;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+#content-page {
+  display: flex;
+  flex-direction: column;
+  margin-top: 25px;
+  height: 80%;
+  overflow-y: auto;
+}
+
+ .buy-container {
+  margin-bottom: 1.2em;
+  display: flex;
+  align-items: center;
+  background-color: #ffffffee;
+} 
+
+p {
+  font-size: 1.5em;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+}
+
+img {
+  height: 50px;
+  width: 50px;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+}
+
