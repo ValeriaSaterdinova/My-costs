@@ -84,10 +84,8 @@ const render = () => {
       const inputBuyDate = document.createElement('input');
       inputBuyDate.type = 'date';
       inputBuyDate.value = when.innerText
-      console.log(inputBuyDate.value)
       container.replaceChild(inputBuyDate, when);
       imageEdit.onclick = () => {
-        console.log(inputBuyName.value, inputBuyValue.value)
         item.text = inputBuyName.value;
         item.price = +inputBuyValue.value;
         item.date = (inputBuyDate.value).split("-").reverse().join('.');
