@@ -52,7 +52,7 @@ const render = () => {
   };
   allBuys.map((item, index) => {
     fullSummary();
-    let { text, price, date } = item;
+    const { text, price, date } = item;
     const container = document.createElement('div');
     container.id = `buy-${index}`;
     container.className = 'buy-container';
@@ -77,18 +77,15 @@ const render = () => {
       inputBuyName.type = 'text';
       inputBuyName.value = place.innerText;
       container.replaceChild(inputBuyName, place);
-
       const inputBuyValue = document.createElement('input');
       inputBuyValue.type = 'number';
       inputBuyValue.value = total.innerText;
       container.replaceChild(inputBuyValue, total);
-
       const inputBuyDate = document.createElement('input');
       inputBuyDate.type = 'date';
       inputBuyDate.value = when.innerText
       console.log(inputBuyDate.value)
       container.replaceChild(inputBuyDate, when);
-      
       imageEdit.onclick = () => {
         console.log(inputBuyName.value, inputBuyValue.value)
         item.text = inputBuyName.value;
@@ -100,7 +97,6 @@ const render = () => {
         render();
       };
     };
-
     const imageDelete = document.createElement('img');
     imageDelete.src = "delete.svg";
     imageDelete.onclick = () => {
