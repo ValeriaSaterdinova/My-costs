@@ -4,30 +4,44 @@ let placeNameInput = null;
 let placeValue = '';
 let placeValueInput = null;
 
-window.onload = init = () => {
+window.onload = init = async () => {
   placeNameInput = document.getElementById('expenses');
   placeNameInput.addEventListener('change', updateName);
   placeValueInput = document.getElementById('expenses1');
   placeValueInput.addEventListener('change', updateValue);
+  const resp = await fetch('http://localhost:8000/allBuys', {
+    method: 'GET'
+  });
+  const result = await resp.json();
+  allBuys = result.data;
   render();
 }
 
-const onClickButton = () => {
+const onClickButton = async () => {
   if (placeName && placeValue) {
-    allBuys.push({
-      text: placeName,
-      date: currentDate,
-      price: placeValue
+    const resp = await fetch('http://localhost:8000/createBuys', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({
+        text: placeName,
+        date: currentDate,
+        price: placeValue
+      })
     });
+    const result = await resp.json();
+    allBuys.push(result.data);
     placeName = '';
     placeNameInput.value = '';
     placeValue = '';
     placeValueInput.value = '';
-    render()
+    render();
   } else {
     alert("Please, add text and summa!")
   }
-}
+};
 
 const updateName = (event) => {
   placeName = event.target.value;
@@ -38,7 +52,7 @@ const updateValue = (event) => {
 }
 
 const now = new Date();
-const currentDate = (now.getDate() + "." + now.getMonth() + "." + now.getFullYear());
+const currentDate = (now.getDate() + "." + (now.getMonth() + 1) + "." + now.getFullYear());
 
 const fullSummary = () => {
   const summa = document.getElementById('sum');
@@ -92,13 +106,22 @@ const render = () => {
       container1.replaceChild(inputBuyValue, total);
       const inputBuyDate = document.createElement('input');
       inputBuyDate.type = 'date';
-      inputBuyDate.value = (date).split(".").reverse().join('-');
+      console.log('convertDate(date)',convertDate(date))
+      inputBuyDate.value = convertDate(date);
       container1.replaceChild(inputBuyDate, when);
-      imageEdit.onclick = () => {
+      imageEdit.onclick = async () => {
         if (inputBuyDate.value && inputBuyName.value && inputBuyValue.value) {
-          item.text = inputBuyName.value;
-          item.price = +inputBuyValue.value;
-          item.date = (inputBuyDate.value).split("-").reverse().join('.');
+          allBuys[index].text = inputBuyName.value;
+          allBuys[index].price = +inputBuyValue.value;
+          allBuys[index].date = (inputBuyDate.value).split("-").reverse().join('.');
+          const resp = await fetch('http://localhost:8000/updateBuy', {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8',
+              'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify(allBuys[index])
+          });
           render();
         } else {
           alert("Please, add data!")
@@ -120,7 +143,19 @@ const render = () => {
   });
 };
 
-const deleteBuy = (index) => {
+const deleteBuy = async (index) => {
+  const id = allBuys[index]._id
+  const resp = await fetch(`http://localhost:8000/deleteBuy?_id=${id}`, {
+    method: 'DELETE'
+  });
+  
   allBuys = allBuys.filter((item, index1) => (index1 !== index));
   render();
 };
+
+const convertDate = (date) => {
+  const dateArr = date.split('.');
+  if ((+dateArr[0]) < 9 && dateArr[0].length === 1) 
+    dateArr[0] = `0${dateArr[0]}`;
+  return dateArr.reverse().join('-')
+}
