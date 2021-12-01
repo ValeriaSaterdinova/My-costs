@@ -13,6 +13,7 @@ window.onload = init = () => {
 }
 
 const onClickButton = () => {
+  if(placeName && placeValue) {
   allBuys.push({
     text: placeName,
     date: currentDate,
@@ -22,7 +23,10 @@ const onClickButton = () => {
   placeNameInput.value = '';
   placeValue = '';
   placeValueInput.value = '';
-  render();
+  render()
+  } else {
+    alert("Please, add text and summa!")
+  }
 }
 
 const updateName = (event) => {
@@ -37,12 +41,8 @@ let now = new Date();
 let currentDate = (now.getDate() + "." + now.getMonth() + "." + now.getFullYear());
 
 const fullSummary = () => {
-  let sum = 0;
-  for (const buy of allBuys) {
-    sum += buy.price
-  };
   const summa = document.getElementById('sum');
-  summa.innerText = sum;
+  summa.innerText = Object.values(allBuys).reduce((t, {price}) => t + (+price), 0);
 };
 
 const render = () => {
@@ -50,8 +50,10 @@ const render = () => {
   while (content.firstChild) {
     content.removeChild(content.firstChild);
   };
+  fullSummary();
   allBuys.map((item, index) => {
-    fullSummary();
+    const container4 = document.createElement('div');
+    container4.className = 'all-container';
     const { text, price, date } = item;
     const container = document.createElement('div');
     container.id = `buy-${index}`;
@@ -62,34 +64,45 @@ const render = () => {
     const place = document.createElement('p');
     place.innerText = text;
     container.appendChild(place);
+    container4.appendChild(container)
+    const container3 = document.createElement('div');
+    container3.className = 'price-date-img';
+    const container1 = document.createElement('div');
+    container1.className = 'when-how-buy';
     const when = document.createElement('p');
     when.innerText = date;
-    container.appendChild(when);
-    content.appendChild(container);
+    container1.appendChild(when);
+    container3.appendChild(container1);
     const total = document.createElement('p');
     total.innerText = price;
-    container.appendChild(total);
+    container1.appendChild(total);
+    const container2 = document.createElement('div');
+    container2.className = 'edit-delete';
     const imageEdit = document.createElement('img');
     imageEdit.src = "edit.svg";
-    container.appendChild(imageEdit);
+    container2.appendChild(imageEdit);
     imageEdit.onclick = () => {
       const inputBuyName = document.createElement('input');
       inputBuyName.type = 'text';
-      inputBuyName.value = place.innerText;
+      inputBuyName.value = text;
       container.replaceChild(inputBuyName, place);
       const inputBuyValue = document.createElement('input');
       inputBuyValue.type = 'number';
-      inputBuyValue.value = total.innerText;
-      container.replaceChild(inputBuyValue, total);
+      inputBuyValue.value = price;
+      container1.replaceChild(inputBuyValue, total);
       const inputBuyDate = document.createElement('input');
       inputBuyDate.type = 'date';
-      inputBuyDate.value = when.innerText
-      container.replaceChild(inputBuyDate, when);
+      inputBuyDate.value = (date).split(".").reverse().join('-');
+      container1.replaceChild(inputBuyDate, when);
       imageEdit.onclick = () => {
+        if(inputBuyDate.value && inputBuyName.value && inputBuyValue.value){
         item.text = inputBuyName.value;
         item.price = +inputBuyValue.value;
         item.date = (inputBuyDate.value).split("-").reverse().join('.');
         render();
+        } else {
+          alert("Please, add data!")
+        }
       };  
       imageDelete.onclick = () => {
         render();
@@ -100,8 +113,10 @@ const render = () => {
     imageDelete.onclick = () => {
       deleteBuy(index);
     };
-    container.appendChild(imageDelete);
-    content.appendChild(container);
+    container2.appendChild(imageDelete);
+    container3.appendChild(container2);
+    container4.appendChild(container3)
+    content.appendChild(container4)
   });
 };
 
