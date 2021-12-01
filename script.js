@@ -78,6 +78,26 @@ const render = () => {
     const place = document.createElement('p');
     place.innerText = text;
     containerBuy.appendChild(place);
+    place.ondblclick = () => {
+      const inputNewBuyName = document.createElement('input');
+      inputNewBuyName.type = 'text';
+      inputNewBuyName.value = text;
+      containerBuy.replaceChild(inputNewBuyName, place);
+      inputNewBuyName.focus();
+      inputNewBuyName.onblur = async () => {
+        allBuys[index].text = inputNewBuyName.value;
+        const resp = await fetch('http://localhost:8000/updateBuy', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Access-Control-Allow-Origin': '*'
+          },
+          body: JSON.stringify(allBuys[index])
+        });
+        render();
+      }
+    }
+    containerBuy.appendChild(place);
     containerAllBuy.appendChild(containerBuy)
     const containerPriceDate = document.createElement('div');
     containerPriceDate.className = 'price-date-img';
@@ -86,10 +106,48 @@ const render = () => {
     const when = document.createElement('p');
     when.innerText = date;
     container1.appendChild(when);
+    when.ondblclick = () => {
+      const inputNewBuyDate = document.createElement('input');
+      inputNewBuyDate.type = 'date';
+      inputNewBuyDate.value = convertDate(date);
+      container1.replaceChild(inputNewBuyDate, when);
+      inputNewBuyDate.focus();
+      inputNewBuyDate.onblur = async () => {
+        allBuys[index].date = (inputNewBuyDate.value).split("-").reverse().join('.');
+        const resp = await fetch('http://localhost:8000/updateBuy', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Access-Control-Allow-Origin': '*'
+          },
+          body: JSON.stringify(allBuys[index])
+        });
+        render();
+      }
+    }
     containerPriceDate.appendChild(container1);
     const total = document.createElement('p');
     total.innerText = price;
     container1.appendChild(total);
+    total.ondblclick = () => {
+      const inputNewBuyValue = document.createElement('input');
+      inputNewBuyValue.type = 'number';
+      inputNewBuyValue.value = price;
+      container1.replaceChild(inputNewBuyValue, total);
+      inputNewBuyValue.focus();
+      inputNewBuyValue.onblur = async () => {
+        allBuys[index].price = +inputNewBuyValue.value
+        const resp = await fetch('http://localhost:8000/updateBuy', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Access-Control-Allow-Origin': '*'
+          },
+          body: JSON.stringify(allBuys[index])
+        });
+        render();
+      }
+    }
     const containerFunctional = document.createElement('div');
     containerFunctional.className = 'edit-delete';
     const imageEdit = document.createElement('img');
@@ -106,7 +164,6 @@ const render = () => {
       container1.replaceChild(inputBuyValue, total);
       const inputBuyDate = document.createElement('input');
       inputBuyDate.type = 'date';
-      console.log('convertDate(date)',convertDate(date))
       inputBuyDate.value = convertDate(date);
       container1.replaceChild(inputBuyDate, when);
       imageEdit.onclick = async () => {
@@ -148,14 +205,14 @@ const deleteBuy = async (index) => {
   const resp = await fetch(`http://localhost:8000/deleteBuy?_id=${id}`, {
     method: 'DELETE'
   });
-  
+
   allBuys = allBuys.filter((item, index1) => (index1 !== index));
   render();
 };
 
 const convertDate = (date) => {
   const dateArr = date.split('.');
-  if ((+dateArr[0]) < 9 && dateArr[0].length === 1) 
+  if ((+dateArr[0]) < 9 && dateArr[0].length === 1)
     dateArr[0] = `0${dateArr[0]}`;
   return dateArr.reverse().join('-')
 }
