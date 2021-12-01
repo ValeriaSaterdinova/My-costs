@@ -8,6 +8,7 @@ body {
   align-items: center;
   height: 95vh;
 }
+
 .box {
   height: 35%;
   display: flex;
@@ -167,11 +168,11 @@ input[type="number" i] {
   width: 5em;
 }
 
-
 @media(max-device-width: 800px) {
   .box {
     width: 85%;
   }
+
   .main-elements-control {
     width: 95%;
     height: 95%;
@@ -361,6 +362,7 @@ input[type="number" i] {
   .box {
     height: 26%;
   }  
+  
   .all-container {
     width: 100%;
     height: 98%;
